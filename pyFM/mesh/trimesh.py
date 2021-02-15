@@ -5,6 +5,7 @@ import numpy as np
 from . import file_utils
 from . import geometry as geom
 from . import laplacian
+import robust_laplacian
 
 
 class TriMesh:
@@ -152,12 +153,8 @@ class TriMesh:
         -------------------------
         eigenvalues, eigenvectors : Only if return_spectrum is True.
         """
-        self.W = laplacian.cotangent_weights(self.vertlist, self.facelist)
-        if fem_area:
-            self.A = laplacian.fem_area_mat(self.vertlist, self.facelist)
-        else:
-            self.A = laplacian.dia_area_mat(self.vertlist ,self.facelist)
-
+        self.W, self.A = robust_laplacian.point_cloud_laplacian(self.vertlist, mollify_factor=1e-5)
+        
         # If k is 0, stop here
         if k > 0:
             self.eigenvalues, self.eigenvectors = laplacian.laplacian_spectrum(self.W, self.A,

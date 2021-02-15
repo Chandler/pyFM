@@ -36,7 +36,7 @@ def zoomout_iteration(eigvects1, eigvects2, FM, step=1, A2=None, return_p2p=Fals
     """
     k2, k1 = FM.shape
     new_k1, new_k2 = k1 + step, k2 + step
-
+    print(f"zoomout {new_k1}")
     p2p = spectral.FM_to_p2p(FM, eigvects1, eigvects2, use_ANN=use_ANN)  # (n2,)
     FM_zo = spectral.p2p_to_FM(p2p, eigvects1[:, :new_k1], eigvects2[:, :new_k2], A2=A2)  # (k2+step, k1+step)
 
@@ -70,6 +70,7 @@ def zoomout_refine(eigvects1, eigvects2, FM, nit, step=1, A2=None, subsample=Non
     FM_zo : zoomout-refined functional map
     """
     k2_0,k1_0 = FM.shape
+
     assert k1_0 + nit*step <= eigvects1.shape[1], \
         f"Not enough eigenvectors on source : \
         {k1_0 + nit*step} are needed when {eigvects1.shape[1]} are provided"

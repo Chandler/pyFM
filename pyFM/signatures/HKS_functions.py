@@ -87,7 +87,7 @@ def auto_HKS(evals,evects,num_T,landmarks=None,scaled=True):
     else:
         return lm_HKS(abs_ev,evects,landmarks,t_list, scaled=scaled)
 
-def mesh_HKS(mesh,num_T,landmarks=None,k=None):
+def mesh_HKS(mesh,num_T, landmarks=None,k=None):
     assert mesh.eigenvalues is not None, "Eigenvalues should be processed"
 
     if k is None:

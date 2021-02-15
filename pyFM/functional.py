@@ -157,7 +157,7 @@ class FunctionalMapping:
 
         return spectral.precise_map.precise_map(self.mesh1,self.mesh2, self.FM, precompute_dmin=precompute)
 
-    def preprocess(self, n_ev=(50,50), n_descr=100, descr_type='WKS', landmarks=None, subsample_step=1, fem_area=False, verbose=False):
+    def preprocess(self, max_k=200, n_ev=(50,50), n_descr=100, descr_type='WKS', landmarks=None, subsample_step=1, fem_area=False, verbose=False):
         """
         Saves the information about the Laplacian mesh for opt
 
@@ -180,9 +180,9 @@ class FunctionalMapping:
         if verbose:
             print('\nComputing Laplacian spectrum')
         if self.mesh1.eigenvalues is None or len(self.mesh1.eigenvalues) < self.k1:
-            self.mesh1.process(max(self.k1,200), fem_area=fem_area, verbose=verbose)
+            self.mesh1.process(max(self.k1,max_k), fem_area=fem_area, verbose=verbose)
         if self.mesh2.eigenvalues is None or len(self.mesh2.eigenvalues) < self.k2:
-            self.mesh2.process(max(self.k2,200), fem_area=fem_area, verbose=verbose)
+            self.mesh2.process(max(self.k2,max_k), fem_area=fem_area, verbose=verbose)
 
         if verbose:
             print('\nComputing descriptors')
@@ -243,7 +243,15 @@ class FunctionalMapping:
 
         return self
 
-    def fit(self, descr_mu=1e-1, lap_mu=1e-3, descr_comm_mu=1, orient_mu=0, orient_reversing=False, optinit='zeros', verbose=False):
+    def fit(
+        self, 
+        descr_mu=1e-1,
+        lap_mu=1e-3,
+        descr_comm_mu=1,
+        orient_mu=0,
+        orient_reversing=False,
+        optinit='zeros',
+        verbose=False):
         """
         Solves the functional map optimization problem :
 
